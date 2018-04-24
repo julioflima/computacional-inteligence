@@ -30,20 +30,19 @@ while lambda < 0 || lambda > 1
 end
 
 %Receiving by user the Order of polynomial parameter.
-while order < 1 || order > 6 || mod(order,1) ~= 0
+while order < 2 || order > 5 || mod(order,1) ~= 0
     %Seting the Lambda parameter, that has to in between 2 <= lambda <= 1.
     order= input('Type the ORDER of polynomial 2 a 5, in natural numbers: ');
-
 end
 
 %Choicing the matrix by the order of polynomial.
-switch order
+switch order ~=0
     case order == 2
-        X = [ones(aeroM,1) speedWind speedWind.^2]
+        X = [ones(aeroM,1) speedWind speedWind.^2];
     case order == 3
-        X = [ones(aeroM,1) speedWind speedWind.^2 speedWind.^3]
+        X = [ones(aeroM,1) speedWind speedWind.^2 speedWind.^3];
     case order == 4
-        X = [ones(aeroM,1) speedWind speedWind.^2 speedWind.^3 speedWind.^4]
+        X = [ones(aeroM,1) speedWind speedWind.^2 speedWind.^3 speedWind.^4];
     case order == 5
         X = [ones(aeroM,1) speedWind speedWind.^2 speedWind.^3 speedWind.^4 speedWind.^5];
 end
