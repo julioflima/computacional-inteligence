@@ -57,8 +57,7 @@ classdef SwarmRobot
     end
     function velocity = getVelocity(robot)
         %Calculate velocity of robot.
-        robot.V = (robot.w).*robot.V + (robot.c1*robot.r1).*minus(robot.pI,robot.X) +(robot.c2*robot.r2).*minus(robot.pG,robot.X);
-        velocity = robot.V;
+        velocity = (robot.w).*robot.V + (robot.c1*robot.r1).*minus(robot.pI,robot.X) +(robot.c2*robot.r2).*minus(robot.pG,robot.X);
     end
    end
 end
