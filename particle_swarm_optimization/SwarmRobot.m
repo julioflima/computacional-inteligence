@@ -1,5 +1,5 @@
 classdef SwarmRobot
-    %GENETICROBOT 
+    %SWARMROBOT 
     %   The body of robot contain all data.
     %   Autor: Julio Lima
     
