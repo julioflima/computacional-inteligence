@@ -1,9 +1,9 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                                                                         %
-%   Universidade Federal do Ceará                                         %
-%   Class: Inteligência Computacional                                     %
+%   Universidade Federal do CearÃ¡                                         %
+%   Class: InteligÃªncia Computacional                                     %
 %   Student: Julio Cesar Ferreira Lima                                    %
-%   Professor: Jarbas Joaci de Mesquita Sá Junior                         %
+%   Professor: Jarbas Joaci de Mesquita SÃ¡ Junior                         %
 %   Enrrollment: 393849                                                   %
 %   Homework: Particle Swarm Optimization - PSO                           %
 %   Repository: https://github.com/juloko/computacional-inteligence       %
@@ -91,6 +91,8 @@ function generations(maxRobots, maxEpochs, typeChart, trace, delay)
         hPlot = plot3(XF(:,1),XF(:,2),XF(:,3),'^');
     else
         if(typeChart ==2)
+            height = size(XF);
+            epochsCol = actualGen*ones(height(1),1);
             xlabel('Epochs');
             ylabel('f(x,y)');
             xlim auto
@@ -115,9 +117,7 @@ function generations(maxRobots, maxEpochs, typeChart, trace, delay)
                 
         else
             if(typeChart == 2)
-                height = size(XF);
-                height = height(1);
-                hPlot = plot(actualGen*ones(height,1),XF(:,3),'^');
+                hPlot = plot(epochsCol,XF(:,3),'^');
             end
         end  
         %Pause update to user observation.
