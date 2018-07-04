@@ -1,9 +1,9 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                                                                         %
-%   Universidade Federal do CearÃ¡                                         %
-%   Class: InteligÃªncia Computacional                                     %
+%   Universidade Federal do Ceará                                         %
+%   Class: Inteligência Computacional                                     %
 %   Student: Julio Cesar Ferreira Lima                                    %
-%   Professor: Jarbas Joaci de Mesquita SÃ¡ Junior                         %
+%   Professor: Jarbas Joaci de Mesquita Sá Junior                         %
 %   Enrrollment: 393849                                                   %
 %   Homework: Particle Swarm Optimization - PSO                           %
 %   Repository: https://github.com/juloko/computacional-inteligence       %
@@ -19,8 +19,8 @@ function pso()
     
     %Call the tests.
     %clc; %Cleaning IDE.
-    %clf; %Cleaning Figures.
-    %generations(30,500,2,'n',1000);
+    %clf; %Cleaning Figures.    
+    %generations(500,500,20,3,'n',300);
 
 end
 
@@ -39,8 +39,12 @@ function main()
         
 
         %Presentation.
-        disp('This software gonna try to find the max value for the function: x*sin(y*PI/4) + y*sin(x*PI/4)');
+        disp('This software gonna try to find the max value for the function: |x*sin(y*PI/4) + y*sin(x*PI/4)|');
+        
+        %Defining scope.
+        scope = input('Type how so far you wanna see? (0 to infinite) ');
 
+        
         %Creating the first individuals.
         maxRobots = input('Using Particle Swarm Optimization, how much particles do you wanna create? ');
         maxEpochs = input('How much epochs do you wanna run? ');
@@ -60,7 +64,7 @@ function main()
         clf;
         
         %Call to PSO function to find the maximum.
-        generations(maxRobots, maxEpochs, typeChart, trace, delay);
+        generations(maxRobots, maxEpochs,scope, typeChart, trace, delay);
         
         %Requesting with the user wanna try one more time.
         request = input('Do you wanna try one more test? (y\\n): ','s');
@@ -70,9 +74,9 @@ end
 
 
 
-function generations(maxRobots, maxEpochs, typeChart, trace, delay)   
+function generations(maxRobots, maxEpochs, scope,typeChart, trace, delay)   
     %Create swarm population.
-    population = Population(maxRobots);
+    population = Population(maxRobots, scope);
     %Receive parameters of population.
     actualGen = population.getEpochs();
     XF = population.getXF();
@@ -80,23 +84,30 @@ function generations(maxRobots, maxEpochs, typeChart, trace, delay)
     hold on;
     title('3D Chart of f(x,y)=|(x*sin((y*PI)/4) + y*sin((x*PI)/4)|');
     if(typeChart == 3)
+        %Include surface;
+        x1=0:scope*.005:scope;
+        y1=0:scope*.005:scope;
+        [x,y] = meshgrid(x1,y1);
+        z = abs(x.*sin((y.*pi())/4) + y.*sin((x.*pi())/4));
+        mesh(x,y,z,'FaceLighting','gouraud','LineWidth',0.3);    
         xlabel('x-axis');
         ylabel('y-axis');
         zlabel('f(x,y)');
-        xlim auto;
-        ylim auto;
-        zlim auto;
+        xlim ([0 scope]);
+        ylim ([0 scope]);
+        zlim ([0 2*scope]);
         grid on;
         view(-45,45);
-        hPlot = plot3(XF(:,1),XF(:,2),XF(:,3),'^');
+        hPlot = plot3(XF(:,1),XF(:,2),XF(:,3),'h',...
+        'MarkerEdgeColor','k',...
+        'MarkerFaceColor',[1 0 1]);
+        set(hPlot,'Color',[1 0 1]);
     else
         if(typeChart ==2)
-            height = size(XF);
-            epochsCol = actualGen*ones(height(1),1);
             xlabel('Epochs');
             ylabel('f(x,y)');
-            xlim auto
-            ylim auto
+            xlim auto;
+            ylim auto;
             hPlot = plot(actualGen,XF(:,3),'^');
         end
     end
@@ -104,20 +115,22 @@ function generations(maxRobots, maxEpochs, typeChart, trace, delay)
     while actualGen<maxEpochs
         %Move population.
         %Show the population parameters in console, like pG and epochs.
-        population = population.movePop() 
+        population = population.movePop();
         actualGen = population.getEpochs();
         XF = population.getXF();
         %Plot  chart.
         if(typeChart == 3)
             if(strcmp(trace,'y'))
-                hPlot = plot3(XF(:,1),XF(:,2),XF(:,3),'^');
+                hPlot = plot3(XF(:,1),XF(:,2),XF(:,3),'x');
             else
-                set(hPlot,'XData',XF(:,1), 'YData',XF(:,3) , 'ZData',  XF(:,3));
+                set(hPlot,'XData',XF(:,1), 'YData',XF(:,2) , 'ZData',  XF(:,3));
             end
-                
+            
         else
             if(typeChart == 2)
-                hPlot = plot(epochsCol,XF(:,3),'^');
+                height = size(XF);
+                height = height(1);
+                hPlot = plot(actualGen*ones(height,1),XF(:,3),'^');
             end
         end  
         %Pause update to user observation.

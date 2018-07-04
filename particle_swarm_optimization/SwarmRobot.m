@@ -1,5 +1,5 @@
 classdef SwarmRobot
-    %SWARMROBOT 
+    %GENETICROBOT 
     %   The body of robot contain all data.
     %   Autor: Julio Lima
     
@@ -14,9 +14,10 @@ classdef SwarmRobot
     r2;
     V;
     f;
+    scope;
    end
    methods
-    function robot = SwarmRobot()
+    function robot = SwarmRobot(rScope)
        robot.X = [rand() rand()];
        robot.w = rand()*0.4;
        robot.r1 = rand();
@@ -24,22 +25,27 @@ classdef SwarmRobot
        robot.V = [rand() rand()];
        robot.f = getEvaluation(robot);
        robot.pI = robot.X;
+       robot.scope = rScope;
     end
     function newRobot = move(robot,bestRobot)
         %Verify if the actual position its the best one.
         robot.pG = bestRobot;
+        initial = robot.getPosition();
         robot.X = robot.updatePosition();
         auxF = getEvaluation(robot);
-        if(auxF>robot.f)
-            robot.f = auxF;
-            robot.pI = getPosition(robot); 
+        if((auxF>robot.f))
+            if(robot.X(1)>robot.scope || robot.X(1)<0) || (robot.X(2)>robot.scope || robot.X(2)<0)
+            else            
+                robot.f = auxF;
+                robot.pI = getPosition(robot);
+            end
         end
         newRobot = robot;
     end
     function [returnX, returnF] = getXF(robot)
         %Get the evaluation and position of robot.
         returnX = robot.X;
-        returnF = robot.f;
+        returnF = robot.getEvaluation();
     end
     function evaluation = getEvaluation(robot)
         %Calculate the locus of the robot.
@@ -57,7 +63,8 @@ classdef SwarmRobot
     end
     function velocity = getVelocity(robot)
         %Calculate velocity of robot.
-        velocity = (robot.w).*robot.V + (robot.c1*robot.r1).*minus(robot.pI,robot.X) +(robot.c2*robot.r2).*minus(robot.pG,robot.X);
+        robot.V = (rand()*0.4).*robot.V + (robot.c1).*rand().*minus(robot.pI,robot.X) +(robot.c2).*rand().*minus(robot.pG,robot.X);
+        velocity = robot.V;
     end
    end
 end
